@@ -1,0 +1,19 @@
+# Don't package local node_modules
+node_modules
+
+# Don't track anything related to debugging
+yarn-debug.log
+yarn-error.log
+workspace*
+
+# Ignore Karma
+karma.conf.js
+
+# Ignore IDE files
+.editorconfig
+.env
+.gitignore
+.browserlistrc
+
+# Don't keep Readme
+README.md

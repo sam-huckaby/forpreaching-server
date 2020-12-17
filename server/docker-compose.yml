@@ -1,0 +1,42 @@
+services:
+  db:
+    image: mongo:latest
+      ports:
+        - "27017:27017"
+    container_name: db
+    volumes: ~/mongo/data:/data/db
+  server:
+    image: samhuckaby/forpreaching-server
+      ports: 
+        - "3001:3001"
+    labels:
+      - "forpreaching.watchtower.enable=true"
+    container_name: server
+    environment:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 27017
+      REPO_USER: "INSERT USER HERE"
+      REPO_PASS: "INSERT PASSWORD HERE"
+      VIRTUAL_HOST: "server.forpreaching.com"
+      LETSENCRYPT_HOST: "server.forpreaching.com"
+  client:
+    image: samhuckaby/forpreaching
+      ports:
+        - "80:80"
+    labels:
+      - "forpreaching.watchtower.enable=true"
+    container_name: client
+    environment:
+      REPO_USER: "INSERT USER HERE"
+      REPO_PASS: "INSERT PASSWORD HERE"
+      VIRTUAL_HOST: "illustrations.forpreaching.com"
+      LETSENCRYPT_HOST: "illustrations.forpreaching.com"
+  watchtower:
+    command: --label-enable --cleanup --interval 300
+    image: containrrr/watchtower
+    labels:
+      - "forpreaching.watchtower.enable=true"
+    network_mode: none
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
