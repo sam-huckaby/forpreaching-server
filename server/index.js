@@ -22,7 +22,12 @@ const unsecuredRouter = require('./routes/unsecured.route');
 
 // Setup the express server
 const app = express();
-const apiPort = 3001;
+let dynamicPort = 3001
+if (process.env.NODE_ENV === 'prod') {
+    dynamicPort = 80;
+}
+const apiPort = dynamicPort;
+
 
 app.use(cors());
 
