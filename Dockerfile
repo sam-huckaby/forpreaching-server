@@ -15,7 +15,7 @@ RUN yarn global add forever
 # Bundle app source
 COPY . .
 
-EXPOSE 3001
+EXPOSE 80
 
 # Give the command that will actually be called when the image is started
 CMD [ "node", "server" ]
