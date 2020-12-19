@@ -59,7 +59,7 @@ app.post('/api/test', jwtCheck, (req, res) => {
     res.send('Server Is Alive!');
 });
 
-app.use('/api/unsecured', unsecuredRouter);
+app.use('/unsecured', unsecuredRouter);
 
 app.use('/api/illustrations', jwtCheck, illustrationRouter);
 

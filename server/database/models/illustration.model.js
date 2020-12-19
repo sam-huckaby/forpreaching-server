@@ -11,17 +11,13 @@ const Illustration = new Schema(
             type: String,
             default: null
         },
-        // createdDate: {
-        //     type: Date,
-        //     default: Date.now
-        // },
         creator: {
             type: String,
             required: true
         },
     },
     {
-        timestamps: true,
+        timestamps: true, // introduces createdAt and updatedAt
         strict: false
     },
 )

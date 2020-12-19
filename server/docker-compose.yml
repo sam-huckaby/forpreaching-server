@@ -9,8 +9,6 @@ services:
       - "~/mongo/data:/data/db"
   server:
     image: "samhuckaby/server.forpreaching.com"
-    ports:
-      - "3001:3001"
     labels:
       - "forpreaching.watchtower.enable=true"
     container_name: server
@@ -24,8 +22,6 @@ services:
       LETSENCRYPT_HOST: "server.forpreaching.com"
   client:
     image: "samhuckaby/forpreaching.com"
-    ports:
-      - "4200:80"
     labels:
       - "forpreaching.watchtower.enable=true"
     container_name: client
@@ -48,3 +44,11 @@ services:
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+# https://github.com/nginx-proxy/nginx-proxy/issues/1132
+# On the AWS instance, you must first run:
+  # `docker network create webproxy`
+# You must also start the nginx-proxy and the letsencrypt-nginx-proxy-companion with the --network flag set to `webproxy`
+networks:
+  default:
+    external:
+      name: webproxy

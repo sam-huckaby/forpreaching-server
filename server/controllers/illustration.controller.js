@@ -72,7 +72,7 @@ getIllustrations = async (req, res) => {
 }
 
 getIllustrationById = async (req, res) => {
-    Illustration.findOne({ _id: req.query.id }, (err, illustration) => {
+    Illustration.findOne({ _id: req.params.id }, (err, illustration) => {
             // If we failed the lookup, just get out of there
             if(err) {
                 return res.status(400).json({
@@ -85,7 +85,7 @@ getIllustrationById = async (req, res) => {
             if(!illustration) {
                 return res.status(404).json({
                     success: false,
-                    error: 'No illustration found with id ' + req.query.id,
+                    error: 'No illustration found with id ' + req.params.id,
                 });
             }
     
@@ -94,7 +94,7 @@ getIllustrationById = async (req, res) => {
 }
 
 getTopTenIllustrations = async (req, res) => {
-    await Illustration.find().limit(10).exec((err, illustrations) => {
+    await Illustration.find().sort({createdAt: 'desc'}).limit(10).exec((err, illustrations) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
