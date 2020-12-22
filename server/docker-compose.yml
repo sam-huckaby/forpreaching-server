@@ -10,7 +10,7 @@ services:
   server:
     image: "samhuckaby/server.forpreaching.com"
     labels:
-      - "forpreaching.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=true"
     container_name: server
     environment:
       DB_HOST: 172.26.15.49
@@ -23,7 +23,7 @@ services:
   client:
     image: "samhuckaby/forpreaching.com"
     labels:
-      - "forpreaching.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=true"
     container_name: client
     environment:
       REPO_USER: "INSERT USER HERE"
@@ -36,7 +36,7 @@ services:
     command: --label-enable --cleanup --interval 300
     image: containrrr/watchtower
     labels:
-      - "forpreaching.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=true"
     network_mode: none
     environment:
       REPO_USER: "INSERT USER HERE"
