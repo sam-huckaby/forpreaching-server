@@ -57,18 +57,22 @@ deleteIllustration = async (req, res) => {
 }
 
 getIllustrations = async (req, res) => {
-    console.log(req.query.search);
-    await Illustration.find().exec((err, illustrations) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err });
-        }
-        if (!illustrations.length) {
-            return res
-                .status(404)
-                .json({ success: false, error: `Illustrations not found` });
-        }
-        return res.status(200).json({ success: true, data: illustrations })
-    }).catch(err => console.log(err));
+    let query = {};
+    let searchParams = Object.keys(req.query);
+
+    // Convert the values given to Regex for mongo to search
+    for(let prop in searchParams) {
+        query[searchParams[prop]] = {$regex: req.query[searchParams[prop]], $options: 'i'}
+    }
+
+    let illustrations = await Illustration.find(query).exec();
+    
+    if (!illustrations.length) {
+        return res
+            .status(404)
+            .json({ success: false, error: `No illustrations found.` });
+    }
+    return res.status(200).json(illustrations)
 }
 
 getIllustrationById = async (req, res) => {
