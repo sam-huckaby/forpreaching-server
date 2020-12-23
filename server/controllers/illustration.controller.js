@@ -117,10 +117,29 @@ getTopTenIllustrations = async (req, res) => {
     });
 }
 
+updateIllustration = async (req, res) => {
+    // Let's just not mess around with possibly modifying ids...
+    if(req.body._id) {
+        delete req.body._id;
+    }
+
+    let updated = await Illustration.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true});
+
+    if(!updated) {
+        return res.status(404).json({
+            success: false,
+            info: 'Unable to update illustration ' + req.params.id,
+        });
+    } else {
+        return res.status(200).json(updated);
+    }
+}
+
 module.exports = {
     createIllustration,
     deleteIllustration,
     getIllustrations,
     getIllustrationById,
     getTopTenIllustrations,
+    updateIllustration,
 };

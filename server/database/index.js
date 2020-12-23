@@ -6,7 +6,8 @@ mongoose
     .connect('mongodb://'+process.env.DB_HOST+':'+process.env.DB_PORT+'/illustrations', {
         useNewUrlParser:true,
         useCreateIndex: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false,
     })
     .catch(e => {
         console.error('Connection error', e.message)

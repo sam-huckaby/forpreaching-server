@@ -10,6 +10,8 @@ const router = express.Router();
 
 router.post('/', IllustrationCtrl.createIllustration);
 
+router.put('/:id', IllustrationCtrl.updateIllustration);
+
 router.get('/', IllustrationCtrl.getIllustrations);
 
 router.get('/:id', IllustrationCtrl.getIllustrationById);
