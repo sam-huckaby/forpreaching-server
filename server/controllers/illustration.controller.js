@@ -111,7 +111,7 @@ getTopTenIllustrations = async (req, res) => {
         // Truncate the illustration body for each of the top ten, so that they can't cheat to read them anyways
         for(let i = 0; i < illustrations.length; i++) {
             let ellipsis = (illustrations[i].body.length > 500);
-            illustrations[i].body = illustrations[i].body.substring(0, 500);
+            illustrations[i].body = illustrations[i].body.replace( /(<([^>]+)>)/ig, '').replace(/&nbsp;/ig, ' ').substring(0, 500);
             if (ellipsis) {
                 illustrations[i].body += '...';
             }
