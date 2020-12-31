@@ -59,6 +59,8 @@ app.post('/api/test', jwtCheck, (req, res) => {
     res.send('Server Is Alive!');
 });
 
+app.use(express.static(__dirname + '/public'));
+
 app.use('/unsecured', unsecuredRouter);
 
 app.use('/api/illustrations', jwtCheck, illustrationRouter);

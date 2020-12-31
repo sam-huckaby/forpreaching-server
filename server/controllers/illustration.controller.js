@@ -140,7 +140,6 @@ updateIllustration = async (req, res) => {
 }
 
 getUserIllustrations = async (req, res) => {
-    console.log('INFOSEC');
     let illustrations = await Illustration.find({ creator: req.user.sub }).exec();
     
     if (!illustrations.length) {
