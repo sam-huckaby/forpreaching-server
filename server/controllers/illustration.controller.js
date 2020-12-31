@@ -72,7 +72,7 @@ getIllustrations = async (req, res) => {
             .status(404)
             .json({ success: false, error: `No illustrations found.` });
     }
-    return res.status(200).json(illustrations)
+    return res.status(200).json(illustrations);
 }
 
 getIllustrationById = async (req, res) => {
@@ -139,6 +139,18 @@ updateIllustration = async (req, res) => {
     }
 }
 
+getUserIllustrations = async (req, res) => {
+    console.log('INFOSEC');
+    let illustrations = await Illustration.find({ creator: req.user.sub }).exec();
+    
+    if (!illustrations.length) {
+        return res
+            .status(404)
+            .json({ success: false, error: `No illustrations found.` });
+    }
+    return res.status(200).json(illustrations);
+}
+
 module.exports = {
     createIllustration,
     deleteIllustration,
@@ -146,4 +158,5 @@ module.exports = {
     getIllustrationById,
     getTopTenIllustrations,
     updateIllustration,
+    getUserIllustrations,
 };
