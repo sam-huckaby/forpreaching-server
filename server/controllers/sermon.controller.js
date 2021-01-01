@@ -56,7 +56,106 @@ getTopTenSermons = async (req, res) => {
     });
 }
 
+getSermonById = async (req, res) => {
+    Sermon.findOne({ _id: req.params.id }, (err, sermon) => {
+            // If we failed the lookup, just get out of there
+            if(err) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Failed to find sermon',
+                });
+            }
+    
+            // If the user is already created, just move on
+            if(!sermon) {
+                return res.status(404).json({
+                    success: false,
+                    error: 'No sermon found with id ' + req.params.id,
+                });
+            }
+    
+            return res.status(200).json(sermon)
+        });
+}
+
+updateSermon = async (req, res) => {
+    // Let's just not mess around with possibly modifying ids...
+    if(req.body._id) {
+        delete req.body._id;
+    }
+
+    let updated = await Sermon.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true});
+
+    if(!updated) {
+        return res.status(404).json({
+            success: false,
+            info: 'Unable to update sermon ' + req.params.id,
+        });
+    } else {
+        return res.status(200).json(updated);
+    }
+}
+
+deleteSermon = async (req, res) => {
+    Sermon.remove({ _id: req.params.id, creator: req.user.sub }, (err, results) => {
+        // If we failed the lookup, just get out of there
+        if(err) {
+            console.log('Sermon deletion error:');
+            console.log(err);
+
+            return res.status(400).json({
+                success: false,
+                error: 'Failed to delete sermon',
+            });
+        }
+
+        if (results.deletedCount < 1) {
+            return res.status(404).json({
+                success: false,
+                error: 'No sermon found to delete with that ID'
+            });
+        }
+
+        return res.status(200).json({success: true});
+    });
+}
+
+getSermons = async (req, res) => {
+    let query = {};
+    let searchParams = Object.keys(req.query);
+
+    // Convert the values given to Regex for mongo to search
+    for(let prop in searchParams) {
+        query[searchParams[prop]] = {$regex: req.query[searchParams[prop]], $options: 'i'}
+    }
+
+    let sermons = await Sermon.find(query).exec();
+    
+    if (!sermons.length) {
+        return res
+            .status(404)
+            .json({ success: false, error: `No sermons found.` });
+    }
+    return res.status(200).json(sermons);
+}
+
+getUserSermons = async (req, res) => {
+    let sermons = await Sermon.find({ creator: req.user.sub }).exec();
+    
+    if (!sermons.length) {
+        return res
+            .status(404)
+            .json({ success: false, error: `No sermons found.` });
+    }
+    return res.status(200).json(sermons);
+}
+
 module.exports = {
     createSermon,
     getTopTenSermons,
+    getSermonById,
+    updateSermon,
+    deleteSermon,
+    getSermons,
+    getUserSermons,
 };
