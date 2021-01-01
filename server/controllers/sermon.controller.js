@@ -97,6 +97,7 @@ updateSermon = async (req, res) => {
 }
 
 deleteSermon = async (req, res) => {
+    // TODO: update to deleteOne
     Sermon.remove({ _id: req.params.id, creator: req.user.sub }, (err, results) => {
         // If we failed the lookup, just get out of there
         if(err) {
