@@ -18,6 +18,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Custom routers to handle various subject types
 const illustrationRouter = require('./routes/illustration.route');
+const sermonRouter = require('./routes/sermon.route');
 const unsecuredRouter = require('./routes/unsecured.route');
 
 // Setup the express server
@@ -64,6 +65,8 @@ app.use(express.static(__dirname + '/public'));
 app.use('/unsecured', unsecuredRouter);
 
 app.use('/api/illustrations', jwtCheck, illustrationRouter);
+
+app.use('/api/sermons', jwtCheck, sermonRouter);
 
 // app.use('/api/auth', awuthRouter);
 // app.use('/api', jwtCheck, businessRouter);
