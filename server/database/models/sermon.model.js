@@ -11,6 +11,10 @@ const Sermon = new Schema(
             type: String,
             required: true
         },
+        summary: {
+            type: String,
+            default: null
+        },
         body: {
             type: String,
             default: null
