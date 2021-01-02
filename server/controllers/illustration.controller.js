@@ -33,7 +33,7 @@ createIllustration = async (req, res) => {
 }
 
 deleteIllustration = async (req, res) => {
-    Illustration.remove({ _id: req.params.id, creator: req.user.sub }, (err, results) => {
+    Illustration.deleteOne({ _id: req.params.id, creator: req.user.sub }, (err, results) => {
         // If we failed the lookup, just get out of there
         if(err) {
             console.log('Illustration deletion error:');
