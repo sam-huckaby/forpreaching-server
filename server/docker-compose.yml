@@ -40,6 +40,16 @@ services:
       REPO_PASS: "INSERT PASSWORD HERE"
       VIRTUAL_HOST: "sermons.forpreaching.com"
       LETSENCRYPT_HOST: "sermons.forpreaching.com"
+  studies:
+    image: "samhuckaby/studies.forpreaching.com"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    container_name: studies
+    environment:
+      REPO_USER: "INSERT USER HERE"
+      REPO_PASS: "INSERT PASSWORD HERE"
+      VIRTUAL_HOST: "studies.forpreaching.com"
+      LETSENCRYPT_HOST: "studies.forpreaching.com"
   watchtower: 
     # https://chriswiegman.com/2019/12/keeping-docker-containers-updated/
     # https://containrrr.dev/watchtower/usage-overview/
