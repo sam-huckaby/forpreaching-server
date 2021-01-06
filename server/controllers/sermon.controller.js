@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Sermon = require('../database/models/sermon.model');
 
 // Create a new sermons in the DB
@@ -84,16 +85,26 @@ updateSermon = async (req, res) => {
         delete req.body._id;
     }
 
-    let updated = await Sermon.findOneAndUpdate({ _id: req.params.id }, req.body, {new: true});
+    // Find the sermon to update
+    let sermon = await Sermon.findOne({ _id: req.params.id });
 
-    if(!updated) {
-        return res.status(404).json({
+    // Update the sermon with the new data
+    sermon.overlay(req.body);
+
+    // Save the sermon with the new data and handle any errors (like validation)
+    await sermon.save().catch(async (err) => {
+        // Let the user know that something failed
+        return res.status(500).json({
             success: false,
-            info: 'Unable to update sermon ' + req.params.id,
+            info: err.message,
         });
-    } else {
-        return res.status(200).json(updated);
-    }
+    });
+
+    // Retrieve the newly updated sermon
+    let updated = await Sermon.findOne({ _id: req.params.id });
+
+    // Return the updated sermon to the user
+    return res.status(200).json(updated);
 }
 
 deleteSermon = async (req, res) => {
