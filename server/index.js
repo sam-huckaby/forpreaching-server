@@ -20,6 +20,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 const illustrationRouter = require('./routes/illustration.route');
 const sermonRouter = require('./routes/sermon.route');
 const guideRouter = require('./routes/guide.route');
+const bibleRouter = require('./routes/bible.route');
 const unsecuredRouter = require('./routes/unsecured.route');
 
 // Setup the express server
@@ -70,6 +71,8 @@ app.use('/api/illustrations', jwtCheck, illustrationRouter);
 app.use('/api/sermons', jwtCheck, sermonRouter);
 
 app.use('/api/guides', jwtCheck, guideRouter);
+
+app.use('/api/bible', jwtCheck, bibleRouter);
 
 // app.use('/api/auth', awuthRouter);
 // app.use('/api', jwtCheck, businessRouter);

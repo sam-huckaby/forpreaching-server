@@ -1,3 +1,29 @@
+# -----------------------------------------------------------------
+# The below must be run before docker compose is run
+# -----------------------------------------------------------------
+# sudo docker run --detach \
+#     --name nginx-proxy \
+#     --publish 80:80 \
+#     --publish 443:443 \
+#     --volume /etc/nginx/certs \
+#     --volume /etc/nginx/vhost.d \
+#     --volume /usr/share/nginx/html \
+#     --volume /var/run/docker.sock:/tmp/docker.sock:ro \
+#     --network webproxy \
+#     jwilder/nginx-proxy
+
+
+# sudo docker run --detach \
+#     --name nginx-proxy-letsencrypt \
+#     --volumes-from nginx-proxy \
+#     --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+#     --network webproxy \
+#     --env "DEFAULT_EMAIL=samhuckaby@gmail.com" \
+#     jrcs/letsencrypt-nginx-proxy-companion
+# -----------------------------------------------------------------
+# End Pre-compose step
+# -----------------------------------------------------------------
+
 version: "3.9"
 services:
   db: # https://medium.com/better-programming/persistent-databases-using-dockers-volumes-and-mongodb-9ac284c25b39
