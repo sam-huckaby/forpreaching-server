@@ -28,7 +28,9 @@ const app = express();
 const apiPort = 3001;
 
 
-app.use(cors());
+app.use(cors({
+    exposedHeaders: 'Administer-Illustrations,Administer-Sermons,Administer-Guides'
+}));
 
 // In Production, we operate behind a proxy (and we want real IPs, so we can fight off non-Auth0 access)
 app.set('trust proxy', true);
@@ -55,6 +57,24 @@ let jwtCheck = jwt({
 // This will secure ALL routes. (jwtCheck is middleware, so I have alternately put it on individual routes)
 //app.use(jwtCheck);
 
+// ======================= Custom Auth Middleware ===================
+
+function assignAdminHeaders (req, res, next) {
+    switch(req.baseUrl) {
+        case '/api/illustrations':
+            res.set('Administer-Illustrations', req.user.permissions.indexOf('administer:illustrations') > -1);
+            break;
+        case '/api/sermons':
+            res.set('Administer-Sermons', req.user.permissions.indexOf('administer:sermons') > -1);
+            break;
+        case '/api/guides':
+            res.set('Administer-Guides', req.user.permissions.indexOf('administer:guides') > -1);
+            break;
+    }
+
+    next();
+}
+
 // ======================= Routes ===================
 
 // A ping route to check service health
@@ -66,16 +86,13 @@ app.use(express.static(__dirname + '/public'));
 
 app.use('/unsecured', unsecuredRouter);
 
-app.use('/api/illustrations', jwtCheck, illustrationRouter);
+app.use('/api/illustrations', jwtCheck, assignAdminHeaders, illustrationRouter);
 
-app.use('/api/sermons', jwtCheck, sermonRouter);
+app.use('/api/sermons', jwtCheck, assignAdminHeaders, sermonRouter);
 
-app.use('/api/guides', jwtCheck, guideRouter);
+app.use('/api/guides', jwtCheck, assignAdminHeaders, guideRouter);
 
-app.use('/api/bible', jwtCheck, bibleRouter);
-
-// app.use('/api/auth', awuthRouter);
-// app.use('/api', jwtCheck, businessRouter);
+app.use('/api/bible', jwtCheck, assignAdminHeaders, bibleRouter);
 
 // ======================= Express Init ===================
 

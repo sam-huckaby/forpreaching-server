@@ -154,10 +154,10 @@ getSermons = async (req, res) => {
 getUserSermons = async (req, res) => {
     let sermons = await Sermon.find({ creator: req.user.sub }).exec();
     
-    if (!sermons.length) {
+    if (!sermons) {
         return res
-            .status(404)
-            .json({ success: false, error: `No sermons found.` });
+            .status(500)
+            .json({ success: false, error: `Error retrieving your library.` });
     }
     return res.status(200).json(sermons);
 }

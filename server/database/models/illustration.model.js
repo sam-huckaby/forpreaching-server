@@ -11,6 +11,18 @@ const Illustration = new Schema(
             type: String,
             default: null
         },
+        // The date that this illustration was featured
+        // this field will be populated on both the original and the featured version
+        featured: {
+            type: Date,
+            default: null
+        },
+        // The _id of the original illustration that was featured
+        // This will only be poulated on the featured version
+        original: {
+            type: String,
+            default: null
+        },
         creator: {
             type: String,
             required: true

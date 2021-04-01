@@ -16,9 +16,11 @@ router.post('/', IllustrationCtrl.createIllustration);
 // Get user-level illustrations
 router.get('/library', IllustrationCtrl.getUserIllustrations);
 
+
 // Interact with specific illustrations
 router.get('/:id', IllustrationCtrl.getIllustrationById);
 router.put('/:id', IllustrationCtrl.updateIllustration);
 router.delete('/:id', IllustrationCtrl.deleteIllustration);
+router.post('/:id/feature', IllustrationCtrl.featureIllustration);
 
 module.exports = router;
