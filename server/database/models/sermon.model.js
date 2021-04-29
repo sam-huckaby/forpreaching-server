@@ -36,6 +36,18 @@ const Sermon = new Schema(
             type: String,
             required: true
         },
+        allowComments: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        // Critiques that are only visible to the author
+        comments: [
+            {
+                body: String,
+                date: Date
+            }
+        ]
     },
     {
         timestamps: true, // introduces createdAt and updatedAt
@@ -50,6 +62,7 @@ Sermon.methods.overlay = function (newData) {
     this.scripture = newData.scripture || this.scripture;
     this.summary = newData.summary || this.summary;
     this.video = newData.video || this.video;
+    this.allowComments = newData.allowComments || this.allowComments;
     this.body = newData.body || this.body;
     this.creator = newData.creator || this.creator;
 }

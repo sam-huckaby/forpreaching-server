@@ -17,6 +17,7 @@ router.post('/', SermonCtrl.createSermon);
 router.get('/library', SermonCtrl.getUserSermons);
 
 // Interact with specific sermons
+router.post('/:id/comments', SermonCtrl.appendComment);
 router.get('/:id', SermonCtrl.getSermonById);
 router.put('/:id', SermonCtrl.updateSermon);
 router.delete('/:id', SermonCtrl.deleteSermon);

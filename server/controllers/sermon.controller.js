@@ -76,6 +76,12 @@ getSermonById = async (req, res) => {
             }
     
             return res.status(200).json(sermon)
+        }).catch(async (err) => {
+            // Let the user know that something failed
+            return res.status(500).json({
+                success: false,
+                info: err.message,
+            });
         });
 }
 
@@ -162,6 +168,39 @@ getUserSermons = async (req, res) => {
     return res.status(200).json(sermons);
 }
 
+appendComment = async (req, res) => {
+    // Validate that there is a comment to add
+    if(!req.body.body) {
+        return res.status(500).json({ success: false, error: `Comment must include text.` });
+    }
+
+    // Find the sermon to comment on
+    let sermon = await Sermon.findOne({ _id: req.params.id }).catch(async (err) => {
+        // Let the user know that something failed
+        return res.status(500).json({
+            success: false,
+            info: err.message,
+        });
+    });
+
+    sermon.comments.push({
+        body: req.body.body,
+        date: new Date()
+    });
+
+    // Save the sermon with the new data and handle any errors (like validation)
+    await sermon.save().catch(async (err) => {
+        // Let the user know that something failed
+        return res.status(500).json({
+            success: false,
+            info: err.message,
+        });
+    });
+
+    // Return a success status and (maybe) message
+    return res.status(200).json({"message": "Added Comment!"});
+}
+
 module.exports = {
     createSermon,
     getTopTenSermons,
@@ -170,4 +209,5 @@ module.exports = {
     deleteSermon,
     getSermons,
     getUserSermons,
+    appendComment,
 };
