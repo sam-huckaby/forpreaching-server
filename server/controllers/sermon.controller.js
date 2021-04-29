@@ -183,6 +183,10 @@ appendComment = async (req, res) => {
         });
     });
 
+    if(!sermon.allowComments) {
+        return res.status(403).json({ success: false, error: `This sermon is not accepting comments.` });
+    }
+
     sermon.comments.push({
         body: req.body.body,
         date: new Date()
