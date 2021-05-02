@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { createFalse } = require('typescript');
 const Schema = mongoose.Schema;
 
 const Sermon = new Schema(
@@ -47,7 +48,11 @@ const Sermon = new Schema(
                 body: String,
                 date: Date
             }
-        ]
+        ],
+        featured: {
+            type: Date,
+            default: null
+        }
     },
     {
         timestamps: true, // introduces createdAt and updatedAt
@@ -65,6 +70,7 @@ Sermon.methods.overlay = function (newData) {
     this.allowComments = newData.allowComments || this.allowComments;
     this.body = newData.body || this.body;
     this.creator = newData.creator || this.creator;
+    this.featured = newData.featured || this.featured;
 }
 
 module.exports = mongoose.model('Sermon', Sermon)

@@ -34,7 +34,9 @@ createSermon = async (req, res) => {
 }
 
 getTopTenSermons = async (req, res) => {
-    await Sermon.find().sort({createdAt: 'desc'}).limit(10).exec((err, sermons) => {
+    await Sermon.find({
+        featured: { $ne: null }
+    }).sort({featured: 'desc'}).limit(10).exec((err, sermons) => {
         if (err) {
             return res.status(400).json({ success: false, error: err });
         }
@@ -205,6 +207,21 @@ appendComment = async (req, res) => {
     return res.status(200).json({"message": "Added Comment!"});
 }
 
+featureSermon = async (req, res) => {
+    if (!req.user.permissions || req.user.permissions.indexOf('administer:sermons') < 0) {
+        res.status(403).json({status: 'Forbidden', reason: 'You do not have adequate authority to perform this action.'});
+        return;
+    }
+
+    let found = await Sermon.findOne({ _id: req.params.id });
+
+    found.featured = new Date();
+
+    await found.save();
+
+    res.status(200).json(found);
+}
+
 module.exports = {
     createSermon,
     getTopTenSermons,
@@ -214,4 +231,5 @@ module.exports = {
     getSermons,
     getUserSermons,
     appendComment,
+    featureSermon,
 };
