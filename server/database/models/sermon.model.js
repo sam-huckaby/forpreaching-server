@@ -52,6 +52,10 @@ const Sermon = new Schema(
         featured: {
             type: Date,
             default: null
+        },
+        public: {
+            type: Boolean,
+            default: false
         }
     },
     {
@@ -71,6 +75,7 @@ Sermon.methods.overlay = function (newData) {
     this.body = newData.body || this.body;
     this.creator = newData.creator || this.creator;
     this.featured = newData.featured || this.featured;
+    this.public = newData.public || this.public;
 }
 
 module.exports = mongoose.model('Sermon', Sermon)

@@ -149,6 +149,9 @@ getSermons = async (req, res) => {
         query[searchParams[prop]] = {$regex: req.query[searchParams[prop]], $options: 'i'}
     }
 
+    // Only allow searching for public sermons for the time being
+    query.public = true;
+
     let sermons = await Sermon.find(query).exec();
     
     if (!sermons.length) {
