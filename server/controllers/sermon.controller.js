@@ -93,6 +93,11 @@ updateSermon = async (req, res) => {
         delete req.body._id;
     }
 
+    // Stop non-admins from updating admin details
+    if (!req.user.permissions || req.user.permissions.indexOf('administer:sermons') < 0) {
+        delete req.body.featured;
+    }
+
     // Find the sermon to update
     let sermon = await Sermon.findOne({ _id: req.params.id });
 
@@ -218,7 +223,11 @@ featureSermon = async (req, res) => {
 
     let found = await Sermon.findOne({ _id: req.params.id });
 
-    found.featured = new Date();
+    if(req.body.active) {
+        found.featured = new Date();
+    } else {
+        found.featured = null;
+    }
 
     await found.save();
 
